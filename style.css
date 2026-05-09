@@ -41,7 +41,7 @@ body{
 
 .footer{
     grid-column: 1 / 3;
-    background: #222;
+    background: #21252b;
 }
 
 .menu{
@@ -87,19 +87,17 @@ a{
 .menu-know{
 
 
-    width: 250px;
+    width: auto;
 
     color: white;
 
     padding: 15px;
 }
 .submenu a{
-
-    padding: 10px 0;
-
     text-decoration: none;
-
     color: #aaa;
+    margin-left: 20px;
+    margin-top: 10px;
 }
 .submenu a:hover{
 
