@@ -1,229 +1,254 @@
-/* [GEMINI - MEJORAS.CSS]
-   Actualizado: Animación de pulso para el botón del carrito al agregar productos,
-   corrección de estilos del botón flotante y de secciones de WhatsApp para mostrar el icono SVG correctamente. */
+/* BIT-IO — mejoras.js
+   Se carga DESPUÉS de script.js. Para deshacer todo, quita su <script> del index.html. */
 
-.carrito-panel {
-  visibility: hidden;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.3s;
-}
-body.carrito-abierto .carrito-panel {
-  visibility: visible;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s;
-}
-.apartado-fondo {
-  visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
-}
-body.apartado-abierto .apartado-fondo {
-  visibility: visible;
-  transition: opacity 0.2s ease, visibility 0s;
-}
+// ---- Datos: pega aquí el enlace CSV publicado de tu Google Sheet ----
+CONFIG.email = "julioyaelcar@gmail.com";
+CONFIG.hoja = "";
 
-.carrito-item-nodisponible { opacity: 0.6; border-style: dashed; }
-.carrito-item-nodisponible .carrito-item-nombre { color: var(--peligro); }
+// ---- WhatsApp y correo corregidos ----
+(function () {
+  const wa = linkWhatsApp("Hola Bit-IO, me gustaría saber más sobre sus productos y servicios.");
+  ["#whatsapp-flotante", "#contacto-whatsapp", "#pie-whatsapp", "#pie-whatsapp-numero"].forEach((s) => ($(s).href = wa));
+  $("#contacto-correo").href = "mailto:" + CONFIG.email;
+  $("#contacto-correo-texto").textContent = CONFIG.email;
+  $("#pie-correo").href = "mailto:" + CONFIG.email;
+  $("#pie-correo-texto").textContent = CONFIG.email;
+})();
 
-.producto-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.producto-img img + .producto-img-etiqueta { display: none; }
-
-.modal-ayuda { font-size: 0.8rem; color: var(--texto-suave); margin: -6px 0 14px; }
-.modal-ayuda a { color: var(--neon); font-weight: 600; }
-
-/* [GEMINI] Animación visual para el botón del carrito al confirmar adición (crece y regresa en 300ms) */
-@keyframes pulsoCarrito {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.25); filter: drop-shadow(0 0 8px var(--neon)); }
-  100% { transform: scale(1); }
-}
-.animar-pulso {
-  animation: pulsoCarrito 0.3s ease-in-out;
+// ---- Carrito: productos que ya no existen quedan marcados ----
+function idsValidos() {
+  return Object.keys(carrito).filter((id) => PRODUCTOS.some((p) => p.id === id));
 }
 
-/* [GEMINI] Corrección para asegurar que los iconos de WhatsApp se muestren adecuadamente con tamaño e inline correcto */
-.whatsapp-flotante svg,
-.contacto-icono svg {
-  width: 24px;
-  height: 24px;
-  display: inline-block;
-  vertical-align: middle;
-  fill: currentColor;
+function actualizarContador() {
+  const total = idsValidos().reduce((s, id) => s + carrito[id], 0);
+  const c = $("#carrito-contador");
+  c.textContent = total;
+  c.classList.toggle("oculto", total === 0);
 }
 
-.whatsapp-flotante {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  background-color: #25d366;
-  border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1000;
-  color: #fff;
-  transition: transform 0.2s ease;
-}
-.whatsapp-flotante:hover {
-  transform: scale(1.1);
-}
-
-/* ---- Ventana modal para agregar al carrito ---- */
-.modal-carrito-fondo {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  z-index: 1200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
-}
-body.modal-carrito-abierto .modal-carrito-fondo {
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.2s ease, visibility 0s;
-}
-
-.modal-carrito-tarjeta {
-  background: #0f141c;
-  color: #f1f5f9;
-  border: 1px solid #222d3d;
-  border-radius: 16px;
-  padding: 28px 24px 24px 24px;
-  width: 100%;
-  max-width: 540px;
-  position: relative;
-  display: flex;
-  flex-direction: row; 
-  gap: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-}
-
-html.tema-claro .modal-carrito-tarjeta {
-  background: #ffffff;
-  color: #0f172a;
-  border-color: #cbd5e1;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-}
-
-.modal-carrito-tarjeta .btn-cerrar-modal {
-  position: absolute;
-  top: 10px;
-  left: 12px;
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  font-weight: bold;
-  cursor: pointer;
-  color: inherit;
-  opacity: 0.7;
-  padding: 4px 8px;
-  line-height: 1;
-  border-radius: 6px;
-  transition: opacity 0.2s, background 0.2s;
-}
-.modal-carrito-tarjeta .btn-cerrar-modal:hover {
-  opacity: 1;
-  background: rgba(128, 128, 128, 0.15);
-}
-
-.modal-carrito-img {
-  width: 160px;
-  height: 160px;
-  flex-shrink: 0;
-  background: rgba(128, 128, 128, 0.1);
-  border-radius: 12px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.modal-carrito-img svg { width: 64px; height: 64px; opacity: 0.4; stroke: currentColor; }
-.modal-carrito-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-
-.modal-carrito-info {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex-grow: 1;
-}
-
-#modal-carrito-titulo {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: inherit;
-  margin: 0;
-}
-
-.modal-carrito-precio {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #00ff87;
-  margin: 0;
-}
-
-.modal-carrito-stock {
-  font-size: 0.85rem;
-  opacity: 0.75;
-  margin: 0 0 4px;
-}
-
-.modal-carrito-cantidad-seccion {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 8px;
-}
-.modal-carrito-cantidad-seccion label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: inherit;
-}
-.modal-carrito-cantidad-seccion .carrito-cantidad {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid currentColor;
-  border-opacity: 0.2;
-  border-radius: 8px;
-  overflow: hidden;
-  background: rgba(128, 128, 128, 0.08);
-  width: fit-content;
-}
-.modal-carrito-cantidad-seccion .carrito-cantidad button {
-  background: transparent;
-  border: none;
-  color: inherit;
-  padding: 6px 12px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-.modal-carrito-cantidad-seccion .carrito-cantidad input {
-  background: transparent;
-  border: none;
-  color: inherit;
-  width: 44px;
-  text-align: center;
-  font-size: 0.95rem;
-  font-weight: 600;
-  outline: none;
-}
-
-@media (max-width: 619px) {
-  .modal-carrito-tarjeta {
-    flex-direction: column;
-    padding: 28px 16px 16px 16px;
-    max-width: 360px;
+function renderCarrito() {
+  const cont = $("#carrito-items");
+  const ids = Object.keys(carrito);
+  if (ids.length === 0) {
+    cont.innerHTML = '<div class="carrito-vacio"><p>Tu carrito está vacío.</p><span>[ agrega productos desde el catálogo ]</span></div>';
+  } else {
+    cont.innerHTML = ids.map((id) => {
+      const p = PRODUCTOS.find((x) => x.id === id);
+      const quitar = `<button type="button" class="carrito-quitar" data-testid="quitar-${id}" aria-label="Eliminar del carrito" onclick="quitarDelCarrito('${id}')">×</button>`;
+      if (!p) {
+        return `<div class="carrito-item carrito-item-nodisponible" data-testid="carrito-item-${id}"><div><p class="carrito-item-nombre">Producto ya no disponible</p><p class="carrito-item-precio">Ya no está en el catálogo. Quítalo de tu carrito.</p></div><span></span>${quitar}</div>`;
+      }
+      return `<div class="carrito-item" data-testid="carrito-item-${id}">
+        <div><p class="carrito-item-nombre">${p.nombre}</p><p class="carrito-item-precio">${formatoPrecio(p.precio)} c/u</p></div>
+        <div class="carrito-cantidad">
+          <button type="button" data-testid="restar-${id}" aria-label="Quitar una unidad" onclick="cambiarCantidad('${id}', -1)">−</button>
+          <span data-testid="cantidad-${id}">${carrito[id]}</span>
+          <button type="button" data-testid="sumar-${id}" aria-label="Agregar una unidad" onclick="cambiarCantidad('${id}', 1)">+</button>
+        </div>${quitar}</div>`;
+    }).join("");
   }
-  .modal-carrito-img {
-    width: 100%;
-    height: 140px;
-  }
-  .grid-productos { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  $("#carrito-total").textContent = formatoPrecio(totalCarrito());
 }
+
+function enviarPedidoWhatsApp() {
+  const ids = idsValidos();
+  if (ids.length === 0) return;
+  const lineas = ids.map((id) => {
+    const p = PRODUCTOS.find((x) => x.id === id);
+    return "• " + carrito[id] + " × " + p.nombre + " — " + formatoPrecio(p.precio * carrito[id]);
+  });
+  const mensaje = "Hola Bit-IO, quiero hacer un pedido:\n" + lineas.join("\n") +
+    "\nTotal: " + formatoPrecio(totalCarrito()) + " MXN\n\n¿Me ayudan a confirmar la entrega? Gracias.";
+  window.open(linkWhatsApp(mensaje), "_blank");
+}
+
+// ---- Tarjeta de producto con foto (con ícono de respaldo) ----
+function tarjetaHTML(producto, indice) {
+  const agotado = producto.stock === 0;
+  const foto = producto.imagen ? `<img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" onerror="this.remove()">` : "";
+  return `
+  <article class="tarjeta-producto" style="--i:${indice}" data-testid="tarjeta-${producto.id}">
+    <div class="producto-img" data-testid="imagen-${producto.id}">
+      ${ICONO_CHIP}${foto}
+      <span class="producto-img-etiqueta">${producto.categoria}</span>
+    </div>
+    <div class="tarjeta-cuerpo">
+      <h3 class="tarjeta-nombre">${producto.nombre}</h3>
+      <p class="tarjeta-desc">${producto.descripcion}</p>
+      <div class="tarjeta-info">
+        <span class="tarjeta-precio">${formatoPrecio(producto.precio)}</span>
+        <span class="tarjeta-stock${agotado ? " agotado" : ""}">${agotado ? "Agotado" : "Stock: " + producto.stock}</span>
+      </div>
+      <button type="button" class="btn btn-neon btn-bloque" data-testid="agregar-carrito-${producto.id}" onclick="agregarCarrito('${producto.id}')" ${agotado ? "disabled" : ""}>Agregar al carrito</button>
+      <button type="button" class="btn btn-borde btn-bloque" data-testid="apartar-${producto.id}" onclick="abrirApartado('${producto.id}')" ${agotado ? "disabled" : ""}>Apartar</button>
+    </div>
+  </article>`;
+}
+
+// ---- Apartar: límite al stock + enlace para pedir más ----
+function poblarSelect() {
+  const select = $("#apartado-producto");
+  select.innerHTML = "";
+  PRODUCTOS.forEach((p) => {
+    const o = document.createElement("option");
+    o.value = p.id;
+    o.textContent = p.nombre + " — " + formatoPrecio(p.precio);
+    select.appendChild(o);
+  });
+}
+
+if (!$("#apartado-ayuda")) {
+  const ayuda = document.createElement("p");
+  ayuda.className = "modal-ayuda";
+  ayuda.id = "apartado-ayuda";
+  ayuda.setAttribute("data-testid", "apartado-ayuda");
+  $("#apartado-cantidad").closest("label").after(ayuda);
+}
+
+function actualizarLimiteApartado() {
+  const producto = PRODUCTOS.find((p) => p.id === $("#apartado-producto").value);
+  const input = $("#apartado-cantidad");
+  const ayuda = $("#apartado-ayuda");
+  if (!producto) { input.removeAttribute("max"); ayuda.textContent = ""; return; }
+  input.max = producto.stock;
+  if (Number(input.value) > producto.stock) input.value = producto.stock;
+  const mensaje = "Hola Bit-IO, necesito más de " + producto.stock + " piezas de: " + producto.nombre + ". ¿Me ayudan?";
+  ayuda.innerHTML = "Máximo " + producto.stock + " piezas disponibles. ¿Necesitas más? " +
+    '<a href="' + linkWhatsApp(mensaje) + '" target="_blank" rel="noopener">Pídelas por WhatsApp</a>';
+}
+$("#apartado-producto").addEventListener("change", actualizarLimiteApartado);
+
+// ---- Paneles y menú: foco, aria, cierre con Esc / tocar fuera ----
+let focoPrevio = null;
+
+function abrirCarrito() {
+  focoPrevio = document.activeElement;
+  document.body.classList.add("carrito-abierto");
+  $("#btn-cerrar-carrito").focus();
+}
+function cerrarCarrito() {
+  if (!document.body.classList.contains("carrito-abierto")) return;
+  document.body.classList.remove("carrito-abierto");
+  if (focoPrevio) focoPrevio.focus();
+}
+function abrirApartado(id) {
+  focoPrevio = document.activeElement;
+  $("#apartado-producto").value = id;
+  actualizarLimiteApartado();
+  document.body.classList.add("apartado-abierto");
+  $('[data-testid="apartado-nombre"]').focus();
+}
+function cerrarApartado() {
+  if (!document.body.classList.contains("apartado-abierto")) return;
+  document.body.classList.remove("apartado-abierto");
+  if (focoPrevio) focoPrevio.focus();
+}
+function alternarMenu() {
+  const abierto = document.body.classList.toggle("menu-abierto");
+  $("#btn-menu").setAttribute("aria-expanded", abierto);
+}
+function cerrarMenu() {
+  document.body.classList.remove("menu-abierto");
+  $("#btn-menu").setAttribute("aria-expanded", "false");
+}
+
+$("#btn-menu").setAttribute("aria-expanded", "false");
+$("#btn-menu").setAttribute("aria-controls", "nav-enlaces");
+const panelCarrito = $("#carrito-panel");
+panelCarrito.setAttribute("role", "dialog");
+panelCarrito.setAttribute("aria-modal", "true");
+panelCarrito.setAttribute("aria-labelledby", "titulo-carrito");
+panelCarrito.querySelector("h3").id = "titulo-carrito";
+
+$$("#nav-enlaces a").forEach((a) => a.addEventListener("click", cerrarMenu));
+$("#carrito-overlay").addEventListener("click", cerrarCarrito);
+$("#apartado-fondo").addEventListener("click", (e) => { if (e.target === e.currentTarget) cerrarApartado(); });
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") { cerrarCarrito(); cerrarApartado(); cerrarMenu(); return; }
+  if (e.key !== "Tab") return;
+  const panel = document.body.classList.contains("apartado-abierto") ? $(".modal")
+    : document.body.classList.contains("carrito-abierto") ? panelCarrito : null;
+  if (!panel) return;
+  const foco = Array.from(panel.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled])'));
+  if (!foco.length) return;
+  const primero = foco[0], ultimo = foco[foco.length - 1];
+  if (!panel.contains(document.activeElement)) { e.preventDefault(); primero.focus(); }
+  else if (e.shiftKey && document.activeElement === primero) { e.preventDefault(); ultimo.focus(); }
+  else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primero.focus(); }
+});
+
+// ---- Precio, stock y foto desde Google Sheets ----
+function leerCSV(texto) {
+  const filas = [];
+  let fila = [], campo = "", comillas = false;
+  for (let i = 0; i < texto.length; i++) {
+    const c = texto[i];
+    if (comillas) {
+      if (c === '"' && texto[i + 1] === '"') { campo += '"'; i++; }
+      else if (c === '"') comillas = false;
+      else campo += c;
+    } else if (c === '"') comillas = true;
+    else if (c === ",") { fila.push(campo); campo = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && texto[i + 1] === "\n") i++;
+      fila.push(campo); filas.push(fila); fila = []; campo = "";
+    } else campo += c;
+  }
+  if (campo !== "" || fila.length) { fila.push(campo); filas.push(fila); }
+  return filas;
+}
+
+function aNumero(valor) {
+  const n = parseFloat(String(valor).replace(/[^0-9.\-]/g, ""));
+  return isNaN(n) ? null : n;
+}
+
+function aImagenDrive(texto) {
+  const t = (texto || "").trim();
+  if (!t) return "";
+  const m = t.match(/(?:\/d\/|[?&]id=)([-\w]{25,})/) || t.match(/^([-\w]{25,})$/);
+  return m ? "https://drive.google.com/thumbnail?id=" + m[1] + "&sz=w800" : t;
+}
+
+async function cargarDesdeHoja() {
+  if (!CONFIG.hoja) return;
+  try {
+    const r = await fetch(CONFIG.hoja, { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const filas = leerCSV(await r.text());
+    const cab = filas.shift().map((c) => c.trim().toLowerCase());
+    const col = (n) => cab.indexOf(n);
+    filas.forEach((f) => {
+      const p = PRODUCTOS.find((x) => x.id === (f[col("id")] || "").trim());
+      if (!p) return;
+      const precio = aNumero(f[col("precio")]);
+      const stock = aNumero(f[col("stock")]);
+      if (precio !== null) p.precio = precio;
+      if (stock !== null) p.stock = Math.max(0, Math.floor(stock));
+      const foto = aImagenDrive(f[col("foto")]);
+      if (foto) p.imagen = foto;
+    });
+  } catch (error) {
+    console.warn("No se pudo leer la hoja; se usan los datos del código.", error);
+  }
+}
+
+// ---- Arranque de las mejoras ----
+function refrescarTodo() {
+  renderCatalogo();
+  renderCarrito();
+  actualizarContador();
+  poblarSelect();
+  actualizarLimiteApartado();
+}
+refrescarTodo();
+cargarDesdeHoja().then(() => {
+  Object.keys(carrito).forEach((id) => {
+    const p = PRODUCTOS.find((x) => x.id === id);
+    if (p && carrito[id] > p.stock) { if (p.stock > 0) carrito[id] = p.stock; else delete carrito[id]; }
+  });
+  guardarCarrito();
+  refrescarTodo();
+});
