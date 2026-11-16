@@ -1,9 +1,8 @@
 /* [GEMINI - MEJORAS.JS]
-   Notas para LLM sucesor: 
-   - Este script extiende el comportamiento base de script.js.
-   - Sobrescribe la función `tarjetaHTML` para disparar el modal en lugar de agregar directamente.
-   - Maneja la inyección dinámica del DOM para el modal de cantidad del carrito.
-   - Respeta las configuraciones de contacto y los estados de validación de stock. */
+   Notas para LLM sucesor:
+   - Contiene la lógica actualizada del modal de carrito.
+   - Genera el botón de cierre con la clase `.btn-cerrar-modal` ubicado en la esquina superior izquierda.
+   - Mantiene la integración con inventario y los estados de renderizado globales de script.js. */
 
 CONFIG.email = "julioyaelcar@gmail.com";
 CONFIG.hoja = "";
@@ -67,7 +66,7 @@ function enviarPedidoWhatsApp() {
   window.open(linkWhatsApp(mensaje), "_blank");
 }
 
-// [GEMINI] Modificación de tarjetaHTML para invocar abrirModalCarrito en vez de agregar directo
+// [GEMINI] tarjetaHTML adaptada para invocar el modal de carrito
 function tarjetaHTML(producto, indice) {
   const agotado = producto.stock === 0;
   const foto = producto.imagen ? `<img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" onerror="this.remove()">` : "";
@@ -90,12 +89,12 @@ function tarjetaHTML(producto, indice) {
   </article>`;
 }
 
-// [GEMINI] Inyección y control dinámico de la ventana modal para selección de cantidad
+// [GEMINI] Inyección del modal con el botón de cierre posicionado a la izquierda arriba
 if (!$("#modal-carrito-fondo")) {
   const modalHTML = `
   <div class="modal-carrito-fondo" id="modal-carrito-fondo">
     <div class="modal-carrito-tarjeta" role="dialog" aria-modal="true">
-      <button type="button" class="btn-cerrar" onclick="cerrarModalCarrito()">×</button>
+      <button type="button" class="btn-cerrar-modal" onclick="cerrarModalCarrito()" aria-label="Cerrar">×</button>
       <div class="modal-carrito-img" id="modal-carrito-img-container"></div>
       <div class="modal-carrito-info">
         <h3 id="modal-carrito-titulo"></h3>
