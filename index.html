@@ -2,7 +2,17 @@
 <!--
 =====================================================================
   BIT-IO — Componentes electrónicos, impresión 3D, corte láser y CNC
-  [GEMINI: index.html actualizado con la estructura correcta del icono SVG en el botón flotante de WhatsApp]
+  Estructura del proyecto:
+    index.html -> estructura y textos (este archivo)
+    style.css  -> colores y diseño
+    script.js  -> tus datos (CONFIG), catálogo (PRODUCTOS) y lógica
+=====================================================================
+  QUÉ CAMBIAR PARA PERSONALIZARLO (busca "[PERSONALIZAR]"):
+   1) WhatsApp, correo, horario, dirección, mapa, redes y GitHub -> script.js (CONFIG)
+   2) Productos                                                  -> script.js (PRODUCTOS)
+   3) Proyectos/guías de GitHub                                  -> script.js (PROYECTOS_GITHUB)
+   4) Logo, textos de servicios, nosotros y FAQ                  -> este archivo
+   5) Colores oscuros -> style.css (:root) · Colores claros -> style.css (html.tema-claro)
 =====================================================================
 -->
 <html lang="es-MX">
@@ -10,10 +20,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bit-IO | Componentes electrónicos, impresión 3D, corte láser y CNC</title>
-  <meta name="description" content="Bit-IO: componentes electrónicos y servicios de fabricación digital para estudiantes y makers en Coatepec, Veracruz. Pide por WhatsApp." />
+  <meta name="description" content="Bit-IO: componentes electrónicos y servicios de fabricación digital (impresión 3D, corte láser y CNC) para estudiantes y makers en Coatepec, Veracruz. Pide por WhatsApp." />
   <meta name="theme-color" content="#0b0e13" />
 
-  <!-- [GEMINI] Carga inicial de preferencias de tema para evitar destellos -->
+  <!-- Aplica el tema guardado (oscuro o claro) antes de pintar la página -->
   <script>
     try {
       if (localStorage.getItem("bitio_tema") === "claro") {
@@ -22,16 +32,19 @@
     } catch (error) {}
   </script>
 
+  <!-- Favicon: marca Bit-IO dibujada en SVG (sin archivos externos). [PERSONALIZAR] si tienes logo propio -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg stroke='%2300FF87' stroke-width='5' stroke-linecap='round'%3E%3Cpath d='M24 16V7M32 16V7M40 16V7M24 48v9M32 48v9M40 48v9M16 24H7M16 32H7M16 40H7M48 24h9M48 32h9M48 40h9'/%3E%3C/g%3E%3Crect x='16' y='16' width='32' height='32' rx='8' fill='%2300FF87'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='26' font-weight='bold' text-anchor='middle' fill='%2304120A'%3EB%3C/text%3E%3C/svg%3E" />
 
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="mejoras.css" />
 </head>
 
 <body>
 
+  <!-- ============ MENÚ DE NAVEGACIÓN FIJO ============ -->
   <header class="cabecera">
     <nav class="navegacion" aria-label="Menú principal">
+
+      <!-- [PERSONALIZAR] LOGO: reemplaza este bloque por tu imagen: <img src="mi-logo.png" alt="Bit-IO"> -->
       <a href="#inicio" class="logo" data-testid="enlace-logo" aria-label="Bit-IO — inicio">
         <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
           <g class="logo-pines" stroke-width="5" stroke-linecap="round">
@@ -53,12 +66,21 @@
       </ul>
 
       <div class="nav-acciones">
-        <button type="button" class="btn-tema" id="btn-tema" data-testid="btn-tema" onclick="alternarTema()" aria-label="Cambiar modo oscuro/claro">
-          <svg class="icono-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" /></svg>
-          <svg class="icono-luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+        <!-- Botón de tema oscuro / claro -->
+        <button type="button" class="btn-tema" id="btn-tema" data-testid="btn-tema" onclick="alternarTema()" aria-label="Cambiar entre modo oscuro y claro">
+          <svg class="icono-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+          </svg>
+          <svg class="icono-luna" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
         </button>
-        <button type="button" class="btn-carrito" id="btn-carrito" data-testid="abrir-carrito" onclick="abrirCarrito()" aria-label="Abrir carrito">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
+        <button type="button" class="btn-carrito" id="btn-carrito" data-testid="abrir-carrito" onclick="abrirCarrito()" aria-label="Abrir carrito de compras">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+          </svg>
           <span class="carrito-contador oculto" id="carrito-contador" data-testid="carrito-contador">0</span>
         </button>
         <button type="button" class="btn-menu" id="btn-menu" data-testid="btn-menu" onclick="alternarMenu()" aria-label="Abrir o cerrar el menú">
@@ -69,74 +91,134 @@
   </header>
 
   <main>
+
+    <!-- ============ INICIO (HERO) ============ -->
     <section id="inicio" class="heroe">
       <div class="heroe-contenedor">
         <div>
           <p class="heroe-etiqueta linea"><span class="linea-int" style="--d:0.05s">// electrónica · impresión 3D · láser · cnc</span></p>
+
+          <!-- Título del negocio -->
           <h1 class="heroe-titulo">
             <span class="linea"><span class="linea-int" style="--d:0.15s">Bit-IO<span class="cursor" aria-hidden="true"></span></span></span>
           </h1>
+
+          <!-- Frase corta -->
           <p class="heroe-frase">
             <span class="linea"><span class="linea-int" style="--d:0.3s">Componentes electrónicos, impresión 3D,</span></span>
             <span class="linea"><span class="linea-int" style="--d:0.4s"><span class="resaltar">corte láser y CNC</span> para estudiantes y makers.</span></span>
           </p>
+
           <p class="heroe-meta aparecer" style="--d:0.5s">[ pide por WhatsApp · recoge en punto de entrega acordado ]</p>
+
           <div class="heroe-botones aparecer" style="--d:0.6s">
             <a href="#catalogo" class="btn btn-neon" data-testid="ver-catalogo">Ver catálogo</a>
             <a href="#servicios" class="btn btn-borde" data-testid="cotizar-servicio-cta">Cotizar un servicio</a>
           </div>
         </div>
+
+        <!-- Visual del circuito con paralaje -->
         <div class="aparecer" style="--d:0.4s">
-          <div class="heroe-visual" aria-hidden="true">
-            <span class="heroe-badge heroe-badge-1">IMPRESIÓN 3D</span>
-            <span class="heroe-badge heroe-badge-2">CNC · LÁSER</span>
-          </div>
+        <div class="heroe-visual" aria-hidden="true">
+          <svg class="capa capa-fondo" viewBox="0 0 460 360" fill="none">
+            <g class="circuito-trazos" stroke-width="1.5">
+              <path d="M20 80h120v60h70" /><path d="M440 60H300v80h-50" />
+              <path d="M30 300h100v-60h70" /><path d="M430 280H310v-70h-60" />
+              <path d="M230 20v70" /><path d="M60 180h60" />
+            </g>
+            <g class="circuito-nodos">
+              <circle cx="20" cy="80" r="4" /><circle cx="440" cy="60" r="4" />
+              <circle cx="30" cy="300" r="4" /><circle cx="430" cy="280" r="4" />
+              <circle cx="230" cy="20" r="4" /><circle cx="60" cy="180" r="4" />
+            </g>
+          </svg>
+          <svg class="capa capa-frente" viewBox="0 0 460 360" fill="none">
+            <!-- chip central -->
+            <g class="pines" stroke-width="4" stroke-linecap="round">
+              <path d="M170 110V90M195 110V90M220 110V90M245 110V90M270 110V90M290 110V90" />
+              <path d="M170 250v20M195 250v20M220 250v20M245 250v20M270 250v20M290 250v20" />
+              <path d="M150 130h-20M150 155h-20M150 180h-20M150 205h-20M150 230h-20" />
+              <path d="M310 130h20M310 155h20M310 180h20M310 205h20M310 230h20" />
+            </g>
+            <rect class="chip-cuerpo" x="150" y="110" width="160" height="140" rx="14" stroke-width="2" />
+            <text class="chip-titulo" x="230" y="176" text-anchor="middle" font-family="Consolas, monospace" font-size="30" font-weight="bold">Bit-IO</text>
+            <text class="chip-sub" x="230" y="206" text-anchor="middle" font-family="Consolas, monospace" font-size="12" letter-spacing="4">ELECTRONICA</text>
+            <!-- símbolos: resistencia y capacitor -->
+            <path class="simbolo" d="M55 235l7-11 9 22 9-22 9 22 9-22 7 11" stroke-width="2" stroke-linecap="round" />
+            <path class="pines" d="M35 235h20M95 235h20" stroke-width="2" />
+            <path class="simbolo" d="M368 78v18M380 78v18" stroke-width="2.5" stroke-linecap="round" />
+            <path class="pines" d="M348 87h20M380 87h20" stroke-width="2" />
+          </svg>
+          <span class="heroe-badge heroe-badge-1">IMPRESIÓN 3D</span>
+          <span class="heroe-badge heroe-badge-2">CNC · LÁSER</span>
+        </div>
         </div>
       </div>
+
+      <!-- Categorías destacadas (se llenan con JavaScript) -->
       <div class="categorias-destacadas" id="categorias-destacadas" data-testid="categorias-destacadas"></div>
     </section>
 
+    <!-- Marquesina editorial -->
     <div class="marquesina" aria-hidden="true">
       <div class="marquesina-pista">
         <span>Impresión 3D</span><i>◆</i><span>Corte láser</span><i>◆</i><span>CNC</span><i>◆</i><span>Microcontroladores</span><i>◆</i><span>Sensores</span><i>◆</i><span>Motores</span><i>◆</i><span>Componentes</span><i>◆</i><span>Prototipos</span><i>◆</i>
+        <!-- copia del contenido para que el bucle sea continuo -->
         <span>Impresión 3D</span><i>◆</i><span>Corte láser</span><i>◆</i><span>CNC</span><i>◆</i><span>Microcontroladores</span><i>◆</i><span>Sensores</span><i>◆</i><span>Motores</span><i>◆</i><span>Componentes</span><i>◆</i><span>Prototipos</span><i>◆</i>
       </div>
     </div>
 
+    <!-- ============ CATÁLOGO ============ -->
     <section id="catalogo" class="seccion">
       <div class="contenedor">
         <p class="seccion-etiqueta" data-revelar>// 01 — catálogo</p>
         <h2 class="titulo-seccion" data-revelar style="--i:1">Todo para tu proyecto</h2>
-        <p class="subtitulo-seccion" data-revelar style="--i:2">Busca el componente exacto, filtra por categoría y agrégalo al carrito.</p>
+        <p class="subtitulo-seccion" data-revelar style="--i:2">Busca el componente exacto, filtra por categoría y agrégalo al carrito. El pedido llega directo a nuestro WhatsApp.</p>
+
         <div class="catalogo-toolbar" data-revelar style="--i:3">
           <input type="search" id="buscador" class="buscador" data-testid="buscador" placeholder="Buscar producto… (ej. sensor, ESP32, motor)" aria-label="Buscar producto" />
           <div class="filtro-categorias" id="filtro-categorias" data-testid="filtro-categorias" role="group" aria-label="Filtrar por categoría"></div>
         </div>
+
         <div class="grid-productos" id="grid-productos" data-testid="grid-productos"></div>
       </div>
     </section>
 
+    <!-- ============ SERVICIOS ============ -->
     <section id="servicios" class="seccion seccion-alt">
       <div class="contenedor">
         <p class="seccion-etiqueta" data-revelar>// 02 — servicios</p>
         <h2 class="titulo-seccion" data-revelar style="--i:1">Fabricación digital</h2>
         <p class="subtitulo-seccion" data-revelar style="--i:2">Mándanos tu archivo o tu dibujo por WhatsApp y te cotizamos al momento.</p>
+
         <div class="grid-servicios">
+          <!-- [PERSONALIZAR] Ajusta materiales y tiempos según tu equipo -->
           <article class="tarjeta-servicio" data-revelar style="--i:1" data-testid="servicio-impresion-3d">
+            <div class="servicio-icono" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7" /><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" /><rect x="6" y="14" width="12" height="8" /></svg>
+            </div>
             <h3>Impresión 3D</h3>
             <p>Fabricamos tus piezas a partir de tu archivo STL o tu dibujo: prototipos, carcasas, engranes y piezas para robots.</p>
             <p class="servicio-dato"><strong>Materiales:</strong> PLA, PETG, ABS y TPU</p>
             <p class="servicio-dato"><strong>Tiempo aproximado:</strong> 1 a 4 días</p>
             <a class="btn btn-neon boton-cotizar" data-servicio="impresión 3D" data-testid="cotizar-impresion-3d" target="_blank" rel="noopener" href="#">Solicitar cotización</a>
           </article>
+
           <article class="tarjeta-servicio" data-revelar style="--i:2" data-testid="servicio-corte-laser">
+            <div class="servicio-icono" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+            </div>
             <h3>Corte láser</h3>
             <p>Cortes y grabados precisos para maquetas, letreros, engranes planos y piezas decorativas. Aceptamos DXF y SVG.</p>
             <p class="servicio-dato"><strong>Materiales:</strong> MDF, acrílico, madera y cartón</p>
             <p class="servicio-dato"><strong>Tiempo aproximado:</strong> 1 a 3 días</p>
             <a class="btn btn-neon boton-cotizar" data-servicio="corte láser" data-testid="cotizar-corte-laser" target="_blank" rel="noopener" href="#">Solicitar cotización</a>
           </article>
+
           <article class="tarjeta-servicio" data-revelar style="--i:3" data-testid="servicio-cnc">
+            <div class="servicio-icono" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /></svg>
+            </div>
             <h3>CNC</h3>
             <p>Fresado y corte de piezas con mayor grosor y resistencia: soportes, bases, ruedas y estructuras para tus proyectos.</p>
             <p class="servicio-dato"><strong>Materiales:</strong> MDF, madera sólida y acrílico</p>
@@ -147,102 +229,261 @@
       </div>
     </section>
 
+    <!-- ============ GITHUB: GUÍAS Y TUTORIALES ============ -->
     <section id="github" class="seccion">
       <div class="contenedor">
         <p class="seccion-etiqueta" data-revelar>// 03 — github · aprende</p>
         <h2 class="titulo-seccion" data-revelar style="--i:1">Aprende con nuestros proyectos</h2>
-        <p class="subtitulo-seccion" data-revelar style="--i:2">Guías y tutoriales paso a paso que subimos a GitHub.</p>
+        <p class="subtitulo-seccion" data-revelar style="--i:2">Guías y tutoriales paso a paso que subimos a GitHub: clonas el proyecto, sigues la guía y armas el tuyo. Todo gratis, para practicar y aprender.</p>
+
+        <!-- Las tarjetas de proyectos se llenan con JavaScript (PROYECTOS_GITHUB en script.js) -->
         <div class="grid-github" id="grid-github" data-testid="grid-github"></div>
+
+        <!-- [PERSONALIZAR] El enlace se toma de CONFIG.github -->
         <a class="btn btn-neon" id="enlace-github-principal" data-testid="ver-github" target="_blank" rel="noopener" href="#" data-revelar style="--i:4">Ver todos los proyectos en GitHub</a>
       </div>
     </section>
 
+    <!-- ============ NOSOTROS + PREGUNTAS FRECUENTES ============ -->
     <section id="nosotros" class="seccion seccion-alt">
       <div class="contenedor nosotros-grid">
         <div class="nosotros-texto">
           <p class="seccion-etiqueta" data-revelar>// 04 — nosotros</p>
           <h2 class="titulo-seccion" data-revelar style="--i:1">Somos Bit-IO</h2>
-          <p data-revelar style="--i:2">Somos un negocio de electrónica y fabricación digital pensado para estudiantes y makers.</p>
+          <!-- [PERSONALIZAR] Cuenta aquí tu historia real -->
+          <p data-revelar style="--i:2">Somos un negocio de electrónica y fabricación digital pensado para estudiantes de prepa y universidad, y para makers: vendemos los componentes que necesitas para tus prácticas y proyectos, y fabricamos tus piezas en impresión 3D, corte láser y CNC a precio accesible.</p>
+          <p data-revelar style="--i:3">Pides por WhatsApp, acordamos un punto de entrega y listo: tu proyecto sigue avanzando.</p>
+
           <div class="info-tarjeta" data-revelar style="--i:4" data-testid="info-entregas">
-            <h3>Cómo funcionan las entregas</h3>
-            <p class="dato-direccion">Trabajamos con punto de entrega acordado.</p>
+            <h3>
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13" /><polygon points="16 8 20 8 23 11 23 16 16 16 16 8" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /></svg>
+              Cómo funcionan las entregas
+            </h3>
+            <!-- [PERSONALIZAR] Describe tu punto de entrega real -->
+            <p class="dato-direccion">Trabajamos con punto de entrega acordado: cuando tu pedido esté listo, acordamos contigo por WhatsApp un lugar y una hora que les convengan (tu escuela, el metro, una cafetería…).</p>
           </div>
+
           <div class="info-tarjeta" data-revelar style="--i:5" data-testid="info-pagos">
-            <h3>Métodos de pago</h3>
-            <p>Efectivo al recoger y transferencia bancaria.</p>
+            <h3>
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2" /><line x1="1" y1="10" x2="23" y2="10" /></svg>
+              Métodos de pago
+            </h3>
+            <!-- [PERSONALIZAR] Agrega o cambia tus métodos de pago -->
+            <p>Aceptamos efectivo al recoger y transferencia bancaria. Si tu pedido es grande, podemos acordar un anticipo por WhatsApp.</p>
           </div>
         </div>
+
+        <!-- [PERSONALIZAR] Ajusta las respuestas a tu forma de trabajar -->
         <div class="faq" data-revelar style="--i:2">
           <h3 class="titulo-seccion" style="font-size: clamp(1.4rem, 3vw, 1.8rem)">Preguntas frecuentes</h3>
-          <details data-testid="faq-1"><summary>¿Cómo recibo mi pedido?</summary><p>Puntos de entrega acordados por WhatsApp.</p></details>
-          <details data-testid="faq-2"><summary>¿Qué métodos de pago aceptan?</summary><p>Efectivo y transferencia.</p></details>
+          <details data-testid="faq-1">
+            <summary>¿Cómo recibo mi pedido?</summary>
+            <p>Trabajamos con punto de entrega acordado: platicamos por WhatsApp y nos vemos en un lugar y hora conveniente para los dos. Así no pagas envío ni esperas paquetería.</p>
+          </details>
+          <details data-testid="faq-2">
+            <summary>¿Qué métodos de pago aceptan?</summary>
+            <p>Efectivo al recoger y transferencia bancaria. En pedidos grandes podemos acordar un anticipo para apartar tu material.</p>
+          </details>
+          <details data-testid="faq-3">
+            <summary>¿Cómo aparto un producto?</summary>
+            <p>En el botón "Apartar" de cada producto: llena el formulario con tu nombre, teléfono, cantidad y fecha de recolección, y el mensaje llega directo a nuestro WhatsApp. Te confirmamos disponibilidad y guardamos tu apartado.</p>
+          </details>
+          <details data-testid="faq-4">
+            <summary>¿Cuánto tardan los servicios de fabricación?</summary>
+            <p>Impresión 3D: 1 a 4 días · Corte láser: 1 a 3 días · CNC: 2 a 5 días, dependiendo del tamaño y la cantidad de piezas.</p>
+          </details>
+          <details data-testid="faq-5">
+            <summary>¿Hacen descuentos por volumen o para escuelas?</summary>
+            <p>Sí. Si necesitas kits para un equipo o un grupo de clase, mándanos tu lista por WhatsApp y te damos precio especial.</p>
+          </details>
+          <details data-testid="faq-6">
+            <summary>¿Puedo pedir un producto que no está en el catálogo?</summary>
+            <p>Claro, es muy común. Mándanos la lista de lo que necesitas por WhatsApp y te cotizamos precio y tiempo para conseguirlo.</p>
+          </details>
         </div>
       </div>
     </section>
 
+    <!-- ============ CONTACTO + UBICACIÓN (MAPA) ============ -->
     <section id="contacto" class="seccion">
       <div class="contenedor">
         <p class="seccion-etiqueta" data-revelar>// 05 — contacto y ubicación</p>
         <h2 class="titulo-seccion" data-revelar style="--i:1">Hablemos por WhatsApp</h2>
+        <p class="subtitulo-seccion" data-revelar style="--i:2">Pedidos, apartados y cotizaciones: te respondemos rápido. El pago y la entrega se coordinan directo con nosotros.</p>
+
         <div class="contacto-grid">
           <div class="contacto-tarjetas" data-revelar style="--i:3">
             <a class="contacto-tarjeta" id="contacto-whatsapp" data-testid="contacto-whatsapp" target="_blank" rel="noopener" href="#">
-              <span class="contacto-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></span>
+              <span class="contacto-icono" aria-hidden="true">
+                <svg class="relleno" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" /></svg>
+              </span>
               <span><strong>WhatsApp</strong><span id="contacto-whatsapp-numero"></span></span>
             </a>
-            <a class="contacto-tarjeta" id="contacto-correo" data-testid="contacto-correo" href="#"><span><strong>Correo</strong><span id="contacto-correo-texto"></span></span></a>
+            <a class="contacto-tarjeta" id="contacto-instagram" data-testid="contacto-instagram" target="_blank" rel="noopener" href="#">
+              <span class="contacto-icono" aria-hidden="true">
+                <svg class="relleno" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" /></svg>
+              </span>
+              <span><strong>Instagram</strong><span id="contacto-instagram-texto"></span></span>
+            </a>
+            <a class="contacto-tarjeta" id="contacto-correo" data-testid="contacto-correo" href="#">
+              <span class="contacto-icono" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 5L2 7" /></svg>
+              </span>
+              <span><strong>Correo</strong><span id="contacto-correo-texto"></span></span>
+            </a>
+            <div class="contacto-tarjeta" data-testid="contacto-horario">
+              <span class="contacto-icono" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+              </span>
+              <span><strong>Horario de atención</strong><span class="dato-horario"></span></span>
+            </div>
+            <div class="contacto-tarjeta" data-testid="contacto-entrega">
+              <span class="contacto-icono" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+              </span>
+              <span><strong>Entregas</strong><span class="dato-direccion"></span></span>
+            </div>
           </div>
+
+          <!-- Mapa de Google incrustado. La dirección se cambia en CONFIG.mapa (script.js).
+               En modo oscuro el mapa se muestra oscuro automáticamente. -->
           <div class="mapa" data-revelar style="--i:4">
-            <iframe id="mapa-bitio" data-testid="mapa-bitio" title="Mapa de ubicación" loading="lazy" allowfullscreen></iframe>
+            <iframe id="mapa-bitio" data-testid="mapa-bitio" title="Mapa de ubicación de Bit-IO" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- ============ PIE DE PÁGINA ============ -->
   <footer class="pie">
     <div class="contenedor pie-grid">
-      <div><span class="logo-nombre">Bit<span>-IO</span></span></div>
+      <div>
+        <a href="#inicio" class="logo" aria-label="Bit-IO — inicio">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <g class="logo-pines" stroke-width="5" stroke-linecap="round">
+              <path d="M24 16V7M32 16V7M40 16V7M24 48v9M32 48v9M40 48v9M16 24H7M16 32H7M16 40H7M48 24h9M48 32h9M48 40h9" />
+            </g>
+            <rect class="logo-chip" x="16" y="16" width="32" height="32" rx="8" />
+            <text class="logo-letra" x="32" y="42" font-family="Consolas, monospace" font-size="26" font-weight="bold" text-anchor="middle">B</text>
+          </svg>
+          <span class="logo-nombre">Bit<span>-IO</span></span>
+        </a>
+        <p class="pie-desc">Componentes electrónicos y servicios de fabricación digital para estudiantes y makers.</p>
+        <!-- [PERSONALIZAR] Pon tus enlaces de redes sociales en CONFIG.redes y tu GitHub en CONFIG.github (script.js) -->
+        <div class="redes">
+          <a id="red-facebook" data-testid="red-facebook" href="#" target="_blank" rel="noopener" aria-label="Facebook de Bit-IO">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
+          </a>
+          <a id="red-instagram" data-testid="red-instagram" href="#" target="_blank" rel="noopener" aria-label="Instagram de Bit-IO">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" /></svg>
+          </a>
+          <a id="red-tiktok" data-testid="red-tiktok" href="#" target="_blank" rel="noopener" aria-label="TikTok de Bit-IO">
+            <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" /></svg>
+          </a>
+          <a id="red-github" data-testid="red-github" href="#" target="_blank" rel="noopener" aria-label="GitHub de Bit-IO">
+            <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
+          </a>
+          <a id="pie-whatsapp" data-testid="red-whatsapp" href="#" target="_blank" rel="noopener" aria-label="WhatsApp de Bit-IO">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" /></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Navegación rápida</h4>
+        <ul>
+          <li><a class="pie-enlace" href="#inicio" data-testid="pie-inicio">Inicio</a></li>
+          <li><a class="pie-enlace" href="#catalogo" data-testid="pie-catalogo">Catálogo</a></li>
+          <li><a class="pie-enlace" href="#servicios" data-testid="pie-servicios">Servicios</a></li>
+          <li><a class="pie-enlace" href="#github" data-testid="pie-github">GitHub</a></li>
+          <li><a class="pie-enlace" href="#nosotros" data-testid="pie-nosotros">Nosotros</a></li>
+          <li><a class="pie-enlace" href="#contacto" data-testid="pie-contacto">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Categorías</h4>
+        <ul>
+          <li><button class="pie-enlace" type="button" data-testid="pie-cat-resistencias" onclick="irACategoria('Resistencias')">Resistencias</button></li>
+          <li><button class="pie-enlace" type="button" data-testid="pie-cat-capacitores" onclick="irACategoria('Capacitores')">Capacitores</button></li>
+          <li><button class="pie-enlace" type="button" data-testid="pie-cat-transistores" onclick="irACategoria('Transistores')">Transistores</button></li>
+          <li><button class="pie-enlace" type="button" data-testid="pie-cat-motores" onclick="irACategoria('Motores')">Motores</button></li>
+          <li><button class="pie-enlace" type="button" data-testid="pie-cat-microcontroladores" onclick="irACategoria('Microcontroladores')">Microcontroladores</button></li>
+          <li><button class="pie-enlace" type="button" data-testid="pie-cat-sensores" onclick="irACategoria('Sensores')">Sensores</button></li>
+          <li><button class="pie-enlace" type="button" data-testid="pie-cat-otros" onclick="irACategoria('Otros')">Otros</button></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li>WhatsApp: <a class="pie-enlace" id="pie-whatsapp-numero" href="#"></a></li>
+          <li>Correo: <a class="pie-enlace" id="pie-correo" href="#"><span id="pie-correo-texto"></span></a></li>
+          <li style="margin-top:4px" class="dato-horario"></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Ubicación</h4>
+        <ul>
+          <li class="dato-direccion"></li>
+          <li style="margin-top:8px"><a class="pie-enlace" href="#contacto" data-testid="pie-ver-mapa">Ver en el mapa →</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="pie-copy">© <span id="anio"></span> Bit-IO · Todos los derechos reservados</div>
+    <div class="pie-copy">© <span id="anio"></span> Bit-IO · Todos los derechos reservados · Hecho con cariño para makers</div>
   </footer>
 
-  <!-- [GEMINI] Botón flotante corregido con el icono SVG oficial de WhatsApp -->
+  <!-- ============ BOTÓN FLOTANTE DE WHATSAPP ============ -->
   <a class="whatsapp-flotante" id="whatsapp-flotante" data-testid="whatsapp-flotante" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" /></svg>
   </a>
 
+  <!-- ============ PANEL DEL CARRITO ============ -->
   <div class="carrito-overlay" id="carrito-overlay" data-testid="carrito-overlay"></div>
-  <aside class="carrito-panel" id="carrito-panel" data-testid="carrito-panel">
+  <aside class="carrito-panel" id="carrito-panel" data-testid="carrito-panel" aria-label="Carrito de compras">
     <div class="carrito-cabecera">
       <h3>Tu carrito</h3>
-      <button type="button" class="btn-cerrar" id="btn-cerrar-carrito" onclick="cerrarCarrito()">×</button>
+      <button type="button" class="btn-cerrar" id="btn-cerrar-carrito" data-testid="cerrar-carrito" onclick="cerrarCarrito()" aria-label="Cerrar carrito">×</button>
     </div>
-    <div class="carrito-items" id="carrito-items"></div>
+    <div class="carrito-items" id="carrito-items" data-testid="carrito-items"></div>
     <div class="carrito-pie">
-      <div class="carrito-total"><span>Total</span><strong id="carrito-total">$0</strong></div>
-      <button type="button" class="btn btn-neon btn-bloque" onclick="enviarPedidoWhatsApp()">Enviar pedido por WhatsApp</button>
+      <div class="carrito-total"><span>Total</span><strong id="carrito-total" data-testid="carrito-total">$0</strong></div>
+      <button type="button" class="btn btn-neon btn-bloque" id="btn-enviar-pedido" data-testid="enviar-pedido-whatsapp" onclick="enviarPedidoWhatsApp()">Enviar pedido por WhatsApp</button>
+      <p class="carrito-nota">[ el pago y la entrega se acuerdan por WhatsApp ]</p>
     </div>
   </aside>
 
-  <div class="apartado-fondo" id="apartado-fondo">
-    <div class="modal">
+  <!-- ============ MODAL DE APARTADO ============ -->
+  <div class="apartado-fondo" id="apartado-fondo" data-testid="apartado-fondo">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="titulo-apartado" data-testid="modal-apartado">
       <div class="modal-cabecera">
-        <h3>Apartar producto</h3>
-        <button type="button" class="btn-cerrar" onclick="cerrarApartado()">×</button>
+        <h3 id="titulo-apartado">Apartar producto</h3>
+        <button type="button" class="btn-cerrar" id="btn-cerrar-apartado" data-testid="cerrar-apartado" onclick="cerrarApartado()" aria-label="Cerrar formulario">×</button>
       </div>
-      <form id="form-apartado" onsubmit="return enviarApartado(event)">
-        <label>Nombre <input type="text" name="nombre" required /></label>
-        <label>Teléfono <input type="tel" name="telefono" required /></label>
-        <label>Producto <select name="producto" id="apartado-producto" required></select></label>
-        <label>Cantidad <input type="number" name="cantidad" id="apartado-cantidad" min="1" value="1" required /></label>
-        <label>Fecha <input type="date" name="fecha" id="apartado-fecha" required /></label>
-        <button type="submit" class="btn btn-neon btn-bloque">Enviar por WhatsApp</button>
+      <form id="form-apartado" data-testid="form-apartado" onsubmit="return enviarApartado(event)">
+        <label>Nombre
+          <input type="text" name="nombre" data-testid="apartado-nombre" required placeholder="Tu nombre" />
+        </label>
+        <label>Teléfono
+          <input type="tel" name="telefono" data-testid="apartado-telefono" required placeholder="10 dígitos" pattern="[0-9+ ]{10,15}" />
+        </label>
+        <label>Producto
+          <select name="producto" id="apartado-producto" data-testid="apartado-producto" required></select>
+        </label>
+        <label>Cantidad
+          <input type="number" name="cantidad" id="apartado-cantidad" data-testid="apartado-cantidad" min="1" value="1" required />
+        </label>
+        <label>Fecha de recolección
+          <input type="date" name="fecha" id="apartado-fecha" data-testid="apartado-fecha" required />
+        </label>
+        <button type="submit" class="btn btn-neon btn-bloque" data-testid="apartado-enviar">Enviar por WhatsApp</button>
+        <p class="modal-nota">[ te confirmamos disponibilidad y punto de entrega ]</p>
       </form>
     </div>
   </div>
 
   <script src="script.js"></script>
-  <script src="mejoras.js"></script>
 </body>
 </html>
