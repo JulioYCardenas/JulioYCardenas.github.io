@@ -29,3 +29,19 @@ body.apartado-abierto .apartado-fondo {
 /* Aviso de máximo al apartar */
 .modal-ayuda { font-size: 0.8rem; color: var(--texto-suave); margin: -6px 0 14px; }
 .modal-ayuda a { color: var(--neon); font-weight: 600; }
+
+
+/* Catálogo en 2 columnas en celular */
+@media (max-width: 619px) {
+  .grid-productos { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .tarjeta-producto { min-width: 0; }
+  .tarjeta-cuerpo { padding: 10px; gap: 6px; }
+  .tarjeta-nombre { font-size: 0.82rem; overflow-wrap: anywhere; }
+  .tarjeta-desc { font-size: 0.74rem; }
+  .tarjeta-info { flex-wrap: wrap; gap: 2px 8px; }
+  .tarjeta-precio { font-size: 1rem; }
+  .tarjeta-stock { font-size: 0.64rem; }
+  .producto-img svg { width: 44px; height: 44px; }
+  .producto-img-etiqueta { font-size: 0.56rem; top: 8px; left: 10px; }
+  .tarjeta-producto .btn { padding: 9px 6px; min-height: 40px; font-size: 0.8rem; border-radius: 10px; }
+}
