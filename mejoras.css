@@ -1,7 +1,7 @@
-/* [GEMINI - MEJORAS.CSS] 
-   Estilos implementados por Gemini para control de paneles, transiciones,
-   y la nueva ventana modal interactiva para agregar al carrito con fondo borroso 
-   y diseño responsivo (vertical en móviles, horizontal en escritorios). */
+/* [GEMINI - MEJORAS.CSS]
+   Actualizado: Se eliminó la transparencia del modal agregando colores sólidos (blanco en modo claro, 
+   negro puro en modo oscuro), se reubicó el botón de cierre a la esquina superior izquierda, 
+   y se ajustó el contraste de la tipografía para legibilidad óptima. */
 
 .carrito-panel {
   visibility: hidden;
@@ -29,7 +29,7 @@ body.apartado-abierto .apartado-fondo {
 .modal-ayuda { font-size: 0.8rem; color: var(--texto-suave); margin: -6px 0 14px; }
 .modal-ayuda a { color: var(--neon); font-weight: 600; }
 
-/* ---- Ventana modal para agregar al carrito (Fondo borroso y estructura) ---- */
+/* ---- Ventana modal para agregar al carrito (Fondo borroso detrás, tarjeta sólida) ---- */
 .modal-carrito-fondo {
   position: fixed;
   inset: 0;
@@ -51,26 +51,57 @@ body.modal-carrito-abierto .modal-carrito-fondo {
   transition: opacity 0.2s ease, visibility 0s;
 }
 
-/* [GEMINI] Tarjeta horizontal por defecto en computadora */
+/* [GEMINI] Tarjeta sólida sin transparencia, colores adaptados según tema (claro = blanco, oscuro = negro) */
 .modal-carrito-tarjeta {
-  background: var(--fondo-superficie);
-  border: 1px solid var(--borde);
+  background: #0f141c; /* Color por defecto (modo oscuro: negro sólido) */
+  color: #f1f5f9;      /* Texto claro por defecto */
+  border: 1px solid #222d3d;
   border-radius: 16px;
-  padding: 24px;
+  padding: 28px 24px 24px 24px; /* Espacio superior extra para el botón de cierre */
   width: 100%;
   max-width: 540px;
   position: relative;
   display: flex;
   flex-direction: row; 
   gap: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* [GEMINI] Adaptación automática para Tema Claro (tarjeta blanca y texto oscuro) */
+html.tema-claro .modal-carrito-tarjeta {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* [GEMINI] Botón de cierre posicionado estrictamente arriba a la izquierda */
+.modal-carrito-tarjeta .btn-cerrar-modal {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.7;
+  padding: 4px 8px;
+  line-height: 1;
+  border-radius: 6px;
+  transition: opacity 0.2s, background 0.2s;
+}
+.modal-carrito-tarjeta .btn-cerrar-modal:hover {
+  opacity: 1;
+  background: rgba(128, 128, 128, 0.15);
 }
 
 .modal-carrito-img {
   width: 160px;
   height: 160px;
   flex-shrink: 0;
-  background: var(--fondo-atenuado);
+  background: rgba(128, 128, 128, 0.1);
   border-radius: 12px;
   position: relative;
   overflow: hidden;
@@ -78,7 +109,7 @@ body.modal-carrito-abierto .modal-carrito-fondo {
   align-items: center;
   justify-content: center;
 }
-.modal-carrito-img svg { width: 64px; height: 64px; opacity: 0.4; stroke: var(--texto-suave); }
+.modal-carrito-img svg { width: 64px; height: 64px; opacity: 0.4; stroke: currentColor; }
 .modal-carrito-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 .modal-carrito-info {
@@ -89,22 +120,22 @@ body.modal-carrito-abierto .modal-carrito-fondo {
 }
 
 #modal-carrito-titulo {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: var(--texto);
+  color: inherit;
   margin: 0;
 }
 
 .modal-carrito-precio {
   font-size: 1.25rem;
   font-weight: 800;
-  color: var(--neon);
+  color: #00ff87; /* Color destacado del proyecto */
   margin: 0;
 }
 
 .modal-carrito-stock {
   font-size: 0.85rem;
-  color: var(--texto-suave);
+  opacity: 0.75;
   margin: 0 0 4px;
 }
 
@@ -117,21 +148,22 @@ body.modal-carrito-abierto .modal-carrito-fondo {
 .modal-carrito-cantidad-seccion label {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--texto);
+  color: inherit;
 }
 .modal-carrito-cantidad-seccion .carrito-cantidad {
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--borde);
+  border: 1px solid currentColor;
+  border-opacity: 0.2;
   border-radius: 8px;
   overflow: hidden;
-  background: var(--fondo-atenuado);
+  background: rgba(128, 128, 128, 0.08);
   width: fit-content;
 }
 .modal-carrito-cantidad-seccion .carrito-cantidad button {
   background: transparent;
   border: none;
-  color: var(--texto);
+  color: inherit;
   padding: 6px 12px;
   cursor: pointer;
   font-size: 1rem;
@@ -139,7 +171,7 @@ body.modal-carrito-abierto .modal-carrito-fondo {
 .modal-carrito-cantidad-seccion .carrito-cantidad input {
   background: transparent;
   border: none;
-  color: var(--texto);
+  color: inherit;
   width: 44px;
   text-align: center;
   font-size: 0.95rem;
@@ -147,11 +179,11 @@ body.modal-carrito-abierto .modal-carrito-fondo {
   outline: none;
 }
 
-/* [GEMINI] Media query: En teléfonos (<620px), la tarjeta pasa a ser vertical */
+/* [GEMINI] Media query: En teléfonos (<620px), tarjeta vertical */
 @media (max-width: 619px) {
   .modal-carrito-tarjeta {
     flex-direction: column;
-    padding: 16px;
+    padding: 28px 16px 16px 16px;
     max-width: 360px;
   }
   .modal-carrito-img {
