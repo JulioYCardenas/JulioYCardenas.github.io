@@ -1,7 +1,6 @@
 /* [GEMINI - MEJORAS.CSS]
-   Actualizado: Se eliminó la transparencia del modal agregando colores sólidos (blanco en modo claro, 
-   negro puro en modo oscuro), se reubicó el botón de cierre a la esquina superior izquierda, 
-   y se ajustó el contraste de la tipografía para legibilidad óptima. */
+   Actualizado: Animación de pulso para el botón del carrito al agregar productos,
+   corrección de estilos del botón flotante y de secciones de WhatsApp para mostrar el icono SVG correctamente. */
 
 .carrito-panel {
   visibility: hidden;
@@ -29,7 +28,47 @@ body.apartado-abierto .apartado-fondo {
 .modal-ayuda { font-size: 0.8rem; color: var(--texto-suave); margin: -6px 0 14px; }
 .modal-ayuda a { color: var(--neon); font-weight: 600; }
 
-/* ---- Ventana modal para agregar al carrito (Fondo borroso detrás, tarjeta sólida) ---- */
+/* [GEMINI] Animación visual para el botón del carrito al confirmar adición (crece y regresa en 300ms) */
+@keyframes pulsoCarrito {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); filter: drop-shadow(0 0 8px var(--neon)); }
+  100% { transform: scale(1); }
+}
+.animar-pulso {
+  animation: pulsoCarrito 0.3s ease-in-out;
+}
+
+/* [GEMINI] Corrección para asegurar que los iconos de WhatsApp se muestren adecuadamente con tamaño e inline correcto */
+.whatsapp-flotante svg,
+.contacto-icono svg {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  vertical-align: middle;
+  fill: currentColor;
+}
+
+.whatsapp-flotante {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background-color: #25d366;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  color: #fff;
+  transition: transform 0.2s ease;
+}
+.whatsapp-flotante:hover {
+  transform: scale(1.1);
+}
+
+/* ---- Ventana modal para agregar al carrito ---- */
 .modal-carrito-fondo {
   position: fixed;
   inset: 0;
@@ -51,13 +90,12 @@ body.modal-carrito-abierto .modal-carrito-fondo {
   transition: opacity 0.2s ease, visibility 0s;
 }
 
-/* [GEMINI] Tarjeta sólida sin transparencia, colores adaptados según tema (claro = blanco, oscuro = negro) */
 .modal-carrito-tarjeta {
-  background: #0f141c; /* Color por defecto (modo oscuro: negro sólido) */
-  color: #f1f5f9;      /* Texto claro por defecto */
+  background: #0f141c;
+  color: #f1f5f9;
   border: 1px solid #222d3d;
   border-radius: 16px;
-  padding: 28px 24px 24px 24px; /* Espacio superior extra para el botón de cierre */
+  padding: 28px 24px 24px 24px;
   width: 100%;
   max-width: 540px;
   position: relative;
@@ -67,7 +105,6 @@ body.modal-carrito-abierto .modal-carrito-fondo {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
 }
 
-/* [GEMINI] Adaptación automática para Tema Claro (tarjeta blanca y texto oscuro) */
 html.tema-claro .modal-carrito-tarjeta {
   background: #ffffff;
   color: #0f172a;
@@ -75,7 +112,6 @@ html.tema-claro .modal-carrito-tarjeta {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* [GEMINI] Botón de cierre posicionado estrictamente arriba a la izquierda */
 .modal-carrito-tarjeta .btn-cerrar-modal {
   position: absolute;
   top: 10px;
@@ -129,7 +165,7 @@ html.tema-claro .modal-carrito-tarjeta {
 .modal-carrito-precio {
   font-size: 1.25rem;
   font-weight: 800;
-  color: #00ff87; /* Color destacado del proyecto */
+  color: #00ff87;
   margin: 0;
 }
 
@@ -179,7 +215,6 @@ html.tema-claro .modal-carrito-tarjeta {
   outline: none;
 }
 
-/* [GEMINI] Media query: En teléfonos (<620px), tarjeta vertical */
 @media (max-width: 619px) {
   .modal-carrito-tarjeta {
     flex-direction: column;
