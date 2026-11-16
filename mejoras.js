@@ -1,8 +1,9 @@
 /* [GEMINI - MEJORAS.JS]
    Notas para LLM sucesor:
-   - Contiene la lógica actualizada del modal de carrito.
-   - Genera el botón de cierre con la clase `.btn-cerrar-modal` ubicado en la esquina superior izquierda.
-   - Mantiene la integración con inventario y los estados de renderizado globales de script.js. */
+   - Se actualizó confirmarAgregarCarrito(): ahora actualiza el carrito y el contador, 
+     ejecuta la animación de pulso en el botón del carrito durante 300 ms, y cierra el modal 
+     sin abrir automáticamente el panel lateral del carrito.
+   - Configura de forma robusta los enlaces de WhatsApp con sus iconos correspondientes. */
 
 CONFIG.email = "julioyaelcar@gmail.com";
 CONFIG.hoja = "";
@@ -66,7 +67,6 @@ function enviarPedidoWhatsApp() {
   window.open(linkWhatsApp(mensaje), "_blank");
 }
 
-// [GEMINI] tarjetaHTML adaptada para invocar el modal de carrito
 function tarjetaHTML(producto, indice) {
   const agotado = producto.stock === 0;
   const foto = producto.imagen ? `<img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy" onerror="this.remove()">` : "";
@@ -89,7 +89,6 @@ function tarjetaHTML(producto, indice) {
   </article>`;
 }
 
-// [GEMINI] Inyección del modal con el botón de cierre posicionado a la izquierda arriba
 if (!$("#modal-carrito-fondo")) {
   const modalHTML = `
   <div class="modal-carrito-fondo" id="modal-carrito-fondo">
@@ -164,6 +163,7 @@ function validarCantidadModal() {
   input.value = val;
 }
 
+// [GEMINI] Modificación: Actualiza el carrito sin abrirlo y dispara la animación de pulso en el botón del carrito
 function confirmarAgregarCarrito() {
   if (!productoModalActual) return;
   const cantidad = parseInt($("#modal-carrito-input").value) || 1;
@@ -177,7 +177,15 @@ function confirmarAgregarCarrito() {
   renderCarrito();
   actualizarContador();
   cerrarModalCarrito();
-  abrirCarrito();
+
+  // Animación visual de pulso en el botón del carrito (300 ms)
+  const btnCarrito = $("#btn-carrito");
+  if (btnCarrito) {
+    btnCarrito.classList.add("animar-pulso");
+    setTimeout(() => {
+      btnCarrito.classList.remove("animar-pulso");
+    }, 300);
+  }
 }
 
 function abrirCarrito() { document.body.classList.add("carrito-abierto"); }
