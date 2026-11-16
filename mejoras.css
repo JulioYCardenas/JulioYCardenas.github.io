@@ -1,0 +1,31 @@
+/* BIT-IO — mejoras.css (se carga DESPUÉS de style.css) */
+
+/* Paneles cerrados: no enfocables con Tab ni leídos por lectores de pantalla */
+.carrito-panel {
+  visibility: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.3s;
+}
+body.carrito-abierto .carrito-panel {
+  visibility: visible;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s;
+}
+.apartado-fondo {
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
+body.apartado-abierto .apartado-fondo {
+  visibility: visible;
+  transition: opacity 0.2s ease, visibility 0s;
+}
+
+/* Producto que ya no existe en el carrito */
+.carrito-item-nodisponible { opacity: 0.6; border-style: dashed; }
+.carrito-item-nodisponible .carrito-item-nombre { color: var(--peligro); }
+
+/* Fotos de producto (desde Drive) */
+.producto-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.producto-img img + .producto-img-etiqueta { display: none; }
+
+/* Aviso de máximo al apartar */
+.modal-ayuda { font-size: 0.8rem; color: var(--texto-suave); margin: -6px 0 14px; }
+.modal-ayuda a { color: var(--neon); font-weight: 600; }
