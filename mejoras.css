@@ -1,6 +1,8 @@
-/* BIT-IO — mejoras.css (se carga DESPUÉS de style.css) */
+/* [GEMINI - MEJORAS.CSS] 
+   Estilos implementados por Gemini para control de paneles, transiciones,
+   y la nueva ventana modal interactiva para agregar al carrito con fondo borroso 
+   y diseño responsivo (vertical en móviles, horizontal en escritorios). */
 
-/* Paneles cerrados: no enfocables con Tab ni leídos por lectores de pantalla */
 .carrito-panel {
   visibility: hidden;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.3s;
@@ -18,30 +20,143 @@ body.apartado-abierto .apartado-fondo {
   transition: opacity 0.2s ease, visibility 0s;
 }
 
-/* Producto que ya no existe en el carrito */
 .carrito-item-nodisponible { opacity: 0.6; border-style: dashed; }
 .carrito-item-nodisponible .carrito-item-nombre { color: var(--peligro); }
 
-/* Fotos de producto (desde Drive) */
 .producto-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .producto-img img + .producto-img-etiqueta { display: none; }
 
-/* Aviso de máximo al apartar */
 .modal-ayuda { font-size: 0.8rem; color: var(--texto-suave); margin: -6px 0 14px; }
 .modal-ayuda a { color: var(--neon); font-weight: 600; }
 
+/* ---- Ventana modal para agregar al carrito (Fondo borroso y estructura) ---- */
+.modal-carrito-fondo {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
+body.modal-carrito-abierto .modal-carrito-fondo {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.2s ease, visibility 0s;
+}
 
-/* Catálogo en 2 columnas en celular */
+/* [GEMINI] Tarjeta horizontal por defecto en computadora */
+.modal-carrito-tarjeta {
+  background: var(--fondo-superficie);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  max-width: 540px;
+  position: relative;
+  display: flex;
+  flex-direction: row; 
+  gap: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.modal-carrito-img {
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
+  background: var(--fondo-atenuado);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-carrito-img svg { width: 64px; height: 64px; opacity: 0.4; stroke: var(--texto-suave); }
+.modal-carrito-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+.modal-carrito-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+}
+
+#modal-carrito-titulo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--texto);
+  margin: 0;
+}
+
+.modal-carrito-precio {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--neon);
+  margin: 0;
+}
+
+.modal-carrito-stock {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+  margin: 0 0 4px;
+}
+
+.modal-carrito-cantidad-seccion {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.modal-carrito-cantidad-seccion label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--texto);
+}
+.modal-carrito-cantidad-seccion .carrito-cantidad {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--fondo-atenuado);
+  width: fit-content;
+}
+.modal-carrito-cantidad-seccion .carrito-cantidad button {
+  background: transparent;
+  border: none;
+  color: var(--texto);
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.modal-carrito-cantidad-seccion .carrito-cantidad input {
+  background: transparent;
+  border: none;
+  color: var(--texto);
+  width: 44px;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  outline: none;
+}
+
+/* [GEMINI] Media query: En teléfonos (<620px), la tarjeta pasa a ser vertical */
 @media (max-width: 619px) {
+  .modal-carrito-tarjeta {
+    flex-direction: column;
+    padding: 16px;
+    max-width: 360px;
+  }
+  .modal-carrito-img {
+    width: 100%;
+    height: 140px;
+  }
   .grid-productos { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .tarjeta-producto { min-width: 0; }
-  .tarjeta-cuerpo { padding: 10px; gap: 6px; }
-  .tarjeta-nombre { font-size: 0.82rem; overflow-wrap: anywhere; }
-  .tarjeta-desc { font-size: 0.74rem; }
-  .tarjeta-info { flex-wrap: wrap; gap: 2px 8px; }
-  .tarjeta-precio { font-size: 1rem; }
-  .tarjeta-stock { font-size: 0.64rem; }
-  .producto-img svg { width: 44px; height: 44px; }
-  .producto-img-etiqueta { font-size: 0.56rem; top: 8px; left: 10px; }
-  .tarjeta-producto .btn { padding: 9px 6px; min-height: 40px; font-size: 0.8rem; border-radius: 10px; }
 }
