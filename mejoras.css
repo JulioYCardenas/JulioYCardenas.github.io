@@ -1,13 +1,15 @@
-/* BIT-IO — mejoras.css (se carga DESPUÉS de style.css) */
+/* BIT-IO — mejoras.css
+   Se carga DESPUÉS de style.css
+   ================================================================ */
 
-/* Paneles cerrados: no enfocables con Tab ni leídos por lectores de pantalla */
+/* Paneles cerrados: no enfocables con Tab */
 .carrito-panel {
   visibility: hidden;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.3s;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), visibility 0s linear 0.3s;
 }
 body.carrito-abierto .carrito-panel {
   visibility: visible;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), visibility 0s;
 }
 .apartado-fondo {
   visibility: hidden;
@@ -18,14 +20,129 @@ body.apartado-abierto .apartado-fondo {
   transition: opacity 0.2s ease, visibility 0s;
 }
 
-/* Producto que ya no existe en el carrito */
+/* Producto no disponible en carrito */
 .carrito-item-nodisponible { opacity: 0.6; border-style: dashed; }
 .carrito-item-nodisponible .carrito-item-nombre { color: var(--peligro); }
 
-/* Fotos de producto (desde Drive) */
-.producto-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Fotos desde Drive en tarjeta de catálogo */
+.producto-img img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+}
 .producto-img img + .producto-img-etiqueta { display: none; }
 
-/* Aviso de máximo al apartar */
+/* Aviso de máximo en apartar */
 .modal-ayuda { font-size: 0.8rem; color: var(--texto-suave); margin: -6px 0 14px; }
 .modal-ayuda a { color: var(--neon); font-weight: 600; }
+
+/* Catálogo: 2 columnas en celular */
+@media (max-width: 619px) {
+  .grid-productos          { grid-template-columns: repeat(2,1fr); gap: 10px; }
+  .tarjeta-producto        { min-width: 0; }
+  .tarjeta-cuerpo          { padding: 10px; gap: 6px; }
+  .tarjeta-nombre          { font-size: 0.82rem; overflow-wrap: anywhere; }
+  .tarjeta-desc            { font-size: 0.74rem; }
+  .tarjeta-info            { flex-wrap: wrap; gap: 2px 8px; }
+  .tarjeta-precio          { font-size: 1rem; }
+  .tarjeta-stock           { font-size: 0.64rem; }
+  .producto-img svg        { width: 44px; height: 44px; }
+  .producto-img-etiqueta   { font-size: 0.56rem; top: 8px; left: 10px; }
+  .tarjeta-producto .btn   { padding: 9px 6px; min-height: 40px; font-size: 0.8rem; border-radius: 10px; }
+}
+
+/* Chips de subcategoría */
+.chip-sub { font-size: 0.8rem; padding: 7px 13px; }
+#filtro-subs {
+  margin-top: 2px; padding-top: 10px;
+  border-top: 1px solid var(--borde);
+}
+
+/* ── Modal de detalle de producto ── */
+.detalle-fondo {
+  position: fixed; inset: 0; z-index: 130;
+  display: grid; place-items: center; padding: 18px;
+  background: rgba(4,6,10,0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.22s ease, visibility 0s linear 0.22s;
+}
+.detalle-fondo.abierto {
+  opacity: 1; visibility: visible;
+  transition: opacity 0.22s ease, visibility 0s;
+}
+body.detalle-abierto { overflow: hidden; }
+
+.detalle-modal {
+  position: relative;
+  width: min(760px,100%); max-height: 92vh; overflow-y: auto;
+  background: var(--panel); border: 1px solid var(--borde);
+  border-radius: 20px; padding: 28px 24px;
+  transform: translateY(16px);
+  transition: transform 0.25s cubic-bezier(0.16,1,0.3,1);
+}
+.detalle-fondo.abierto .detalle-modal { transform: none; }
+
+.detalle-cerrar {
+  position: absolute; top: 14px; right: 16px;
+  background: transparent; border: 0; cursor: pointer;
+  color: var(--texto-suave); font-size: 1.8rem; line-height: 1;
+  padding: 2px 8px; border-radius: 8px;
+  transition: color 0.15s ease;
+}
+.detalle-cerrar:hover { color: var(--neon); }
+
+/* Layout vertical en móvil, horizontal en escritorio */
+.detalle-layout { display: flex; flex-direction: column; gap: 20px; }
+@media (min-width: 620px) {
+  .detalle-layout       { flex-direction: row; gap: 28px; align-items: flex-start; }
+  .detalle-img-wrap     { flex: 0 0 260px; }
+}
+
+.detalle-img-wrap .producto-img {
+  aspect-ratio: 1/1; border-radius: 14px;
+  border-bottom: none; clip-path: none;
+}
+.detalle-foto {
+  width: 100%; aspect-ratio: 1/1; object-fit: cover;
+  border-radius: 14px; border: 1px solid var(--borde); display: block;
+}
+
+.detalle-info     { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.detalle-categoria {
+  font-family: var(--mono); font-size: 0.72rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--neon);
+}
+.detalle-nombre { font-size: 1.3rem; line-height: 1.25; letter-spacing: -0.01em; }
+.detalle-precio { font-family: var(--mono); font-size: 1.5rem; font-weight: 700; color: var(--neon); }
+.detalle-stock  { font-family: var(--mono); font-size: 0.8rem; color: var(--texto-suave); }
+.detalle-stock.agotado { color: var(--peligro); }
+
+/* Variantes */
+.detalle-label          { font-size: 0.82rem; font-weight: 700; margin-bottom: 4px; }
+.detalle-variantes-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+.chip-variante           { font-size: 0.82rem; padding: 7px 12px; }
+
+/* Cantidad */
+.detalle-cantidad-wrap { display: flex; flex-direction: column; gap: 6px; }
+.detalle-cantidad       { gap: 10px; }
+.detalle-cantidad input[type="number"] {
+  width: 60px; padding: 6px 10px; text-align: center;
+  border-radius: 9px; border: 1.5px solid var(--borde);
+  background: var(--fondo); color: var(--texto);
+  font-family: var(--mono); font-size: 1rem;
+  -moz-appearance: textfield;
+}
+.detalle-cantidad input[type="number"]::-webkit-outer-spin-button,
+.detalle-cantidad input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+.detalle-cantidad input:focus { outline: none; border-color: var(--neon); }
+.detalle-en-carrito { font-family: var(--mono); font-size: 0.74rem; color: var(--texto-suave); }
+
+/* Animación del ícono del carrito */
+@keyframes carrito-pop {
+  0%  { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  70% { transform: scale(0.9); }
+  100%{ transform: scale(1); }
+}
+.carrito-pop { animation: carrito-pop 0.4s cubic-bezier(0.36,0.07,0.19,0.97) both; }
